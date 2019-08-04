@@ -4,7 +4,7 @@ workflow "New workflow" {
 }
 
 action "yarn" {
-  uses = "nuxt/actions-yarn@master"
+  uses = "Borales/actions-yarn@master"
   runs = "build"
   secrets = ["REACT_APP_FOOD_API_KEY"]
 }
