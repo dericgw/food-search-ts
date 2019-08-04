@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button, Table } from 'antd';
 import styled from 'styled-components';
-import { isNaN } from 'lodash-es';
+import { observer } from 'mobx-react';
 
 import NoResults from './no-results';
 import useStores from '../use-stores';
@@ -25,10 +25,8 @@ const TableFooter = styled.div`
 
 const Cart = () => {
   const {
-    store: {
-      ui: { cartIsOpen, closeCart },
-      cart: { removeFromCart, items: cart },
-    },
+    ui: { cartIsOpen, closeCart },
+    cart: { removeItemFromCart, items: cart, totalCalorieCount },
   } = useStores();
   const tableScroll = { x: false, y: 320 };
   const locale = {
@@ -45,7 +43,7 @@ const Cart = () => {
       key: 'remove',
       align: 'right',
       width: 120,
-      render: ndbno => <Action onClick={() => removeFromCart(ndbno)}>Remove</Action>,
+      render: ndbno => <Action onClick={() => removeItemFromCart(ndbno)}>Remove</Action>,
     },
   ];
 
@@ -55,19 +53,14 @@ const Cart = () => {
     (output, current) => {
       const { ndbno, name, calories } = current;
 
-      // Some of the results come back with the calories as a dash, "-", so we have
-      // to handle that.
-      const currentCalories = isNaN(+calories) ? 0 : +calories;
-
       return {
         columns: [
           ...output.columns,
           { key: ndbno, name: name.replace(/, UPC:.*/, ''), calories, remove: ndbno },
         ],
-        totalCalories: output.totalCalories + currentCalories,
       };
     },
-    { columns: [], totalCalories: 0 },
+    { columns: [] },
   );
 
   return (
@@ -80,11 +73,12 @@ const Cart = () => {
     >
       <Table
         size="small"
+        // @ts-ignore
         columns={columns}
         dataSource={tableData.columns}
         footer={() => (
           <TableFooter>
-            Total calorie count is <span>{tableData.totalCalories.toLocaleString()}</span>
+            Total calorie count is <span>{totalCalorieCount}</span>
           </TableFooter>
         )}
         scroll={tableScroll}
@@ -94,4 +88,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default observer(Cart);

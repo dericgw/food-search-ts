@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Icon, Badge } from 'antd';
 import styled from 'styled-components';
 
-import AppContext from '../app.context';
+import useStores from '../use-stores';
+import { observer } from 'mobx-react';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -22,8 +23,10 @@ const StyledCartButton = styled.button`
 `;
 
 const CartButton = () => {
-  const { cart, openCart } = useContext(AppContext);
-  const numberOfItemsInCart = Object.keys(cart).length;
+  const {
+    ui: { openCart },
+    cart: { numberOfItemsInCart },
+  } = useStores();
 
   return (
     <Wrapper>
@@ -36,4 +39,4 @@ const CartButton = () => {
   );
 };
 
-export default CartButton;
+export default observer(CartButton);

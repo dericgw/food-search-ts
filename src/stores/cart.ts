@@ -1,7 +1,7 @@
 import { observable, computed, runInAction, action } from 'mobx';
-import { findIndex, get } from 'lodash-es';
+import { findIndex, get, isNaN } from 'lodash-es';
 
-import Food from './models/food';
+import Food, { IFood } from './models/food';
 import { IRootStore } from './index';
 import { details } from '../utils/http';
 
@@ -9,8 +9,9 @@ export interface ICart {
   items: Food[];
   numberOfItemsInCart: number;
   hasItemsInCart: boolean;
-  addItemToCart: (item: any) => Promise<void>;
+  addItemToCart: (item: IFood) => Promise<void>;
   removeItemFromCart: (ndbno: string) => void;
+  totalCalorieCount: string;
 }
 
 export default class Cart implements ICart {
@@ -20,6 +21,13 @@ export default class Cart implements ICart {
 
   constructor(rootStore: IRootStore) {
     this.rootStore = rootStore;
+  }
+
+  @computed
+  get totalCalorieCount() {
+    return this.items
+      .reduce((total, item) => total + (isNaN(+item.calories) ? 0 : +item.calories), 0)
+      .toLocaleString();
   }
 
   @computed
@@ -41,9 +49,9 @@ export default class Cart implements ICart {
       const nutrients = get(results, 'report.foods[0].nutrients', []);
 
       runInAction(() => {
-        const { ndbno, name, manu } = item;
-        const food = new Food({ ndbno, name, manu, nutrients });
-        this.items.push(food);
+        console.log(nutrients);
+        item.addNutrients(nutrients);
+        this.items.push(item);
       });
     } catch (error) {
       this.rootStore.ui.showErrorMessage();

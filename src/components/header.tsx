@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Input } from 'antd';
+import { observer } from 'mobx-react';
 
-import Logo from './logo';
-import AppContext from '../app.context';
+import useStores from '../use-stores';
 
 const { Search } = Input;
 
@@ -33,11 +33,12 @@ export const SearchBar = styled(Search)`
 `;
 
 const Header = () => {
-  const { search } = useContext(AppContext);
+  const {
+    search: { search },
+  } = useStores();
 
   return (
     <StyledHeader>
-      <Logo />
       <H1>Food Search!</H1>
       <SearchBar
         placeholder="Search for food..."
@@ -49,4 +50,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default observer(Header);

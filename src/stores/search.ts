@@ -1,5 +1,4 @@
-import { observable, action, runInAction } from 'mobx';
-import { message } from 'antd';
+import { observable, action, runInAction, computed } from 'mobx';
 
 import { IRootStore } from './index';
 import Food from './models/food';
@@ -10,6 +9,7 @@ export interface ISearch {
   offset: number;
   searchTerm: string;
   resultsTotal: number;
+  hasMoreResults: boolean;
   search: (string) => Promise<void>;
   loadMoreResults: () => Promise<void>;
 }
@@ -18,6 +18,11 @@ export default class Search implements ISearch {
   @observable public offset: number = 0;
 
   public results = observable.array<Food>([]);
+
+  @computed
+  public get hasMoreResults() {
+    return this.results.length < this.resultsTotal;
+  }
 
   @observable public resultsTotal: number = 0;
 
@@ -38,7 +43,10 @@ export default class Search implements ISearch {
       } else {
         runInAction(() => {
           this.searchTerm = searchTerm;
-          this.results.replace(results.list.item);
+          const newResults = results.list.item.map(food => {
+            return new Food(this.rootStore.cart, food);
+          });
+          this.results.replace(newResults);
           this.offset = 0;
           this.resultsTotal = results.list.total;
         });
@@ -62,9 +70,10 @@ export default class Search implements ISearch {
 
       runInAction(() => {
         this.offset = newOffset;
-        this.results.concat(results.list.item);
+        results.list.item.forEach(food => {
+          this.results.push(new Food(this.rootStore.cart, food));
+        });
       });
-
     } catch (error) {
       showErrorMessage();
       throw new Error(error);

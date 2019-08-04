@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Row, Col, Statistic, message } from 'antd';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import { get } from 'lodash-es';
 
-import AppContext from '../app.context';
 import { details } from '../utils/http';
+import useStores from '../use-stores';
 
 const Close = styled(Button)`
   &:hover {
@@ -14,7 +15,9 @@ const Close = styled(Button)`
 `;
 
 const Details = () => {
-  const { closeDetails, detailsViewId } = useContext(AppContext);
+  const {
+    ui: { closeDetails, detailsViewId },
+  } = useStores();
   // No need for global state for the nutrients so we will track it locally
   const [nutrients, updateNutrients] = useState([]);
   const [title, updateTitle] = useState('');
@@ -52,4 +55,4 @@ const Details = () => {
   );
 };
 
-export default Details;
+export default observer(Details);

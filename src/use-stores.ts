@@ -2,7 +2,8 @@ import { useContext } from 'react';
 import { MobXProviderContext } from 'mobx-react';
 
 const useStores = () => {
-  return useContext(MobXProviderContext);
+  const { store } = useContext(MobXProviderContext);
+  return store;
 };
 
 export default useStores;

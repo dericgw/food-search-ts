@@ -1,31 +1,39 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { List } from 'antd';
+import { observer } from 'mobx-react';
 import styled from 'styled-components';
 
-import AppContext from '../app.context';
+import useStores from '../use-stores';
 
 const { Item: ListItem } = List;
 
+type ActionProps = {
+  isInCart?: boolean;
+};
+
 const Action = styled.a`
-  color: ${({ isInCart }) => (isInCart ? '#e74c3c' : '#777')};
+  color: ${({ isInCart }: ActionProps) => (isInCart ? '#e74c3c' : '#777')};
   font-size: 12px;
 
   &:hover {
-    color: ${({ isInCart }) => (isInCart ? '#e74c3c' : '#efad1c')};
+    color: ${({ isInCart }: ActionProps) => (isInCart ? '#e74c3c' : '#efad1c')};
   }
 `;
 
 const Item = ({ item }) => {
-  const { name, manu, ndbno } = item;
-  const { addToCart, removeFromCart, cart, openDetails } = useContext(AppContext);
-  const isInCart = ndbno in cart;
+  const { name, manu, ndbno, isInCart } = item;
+  console.log(item);
+  const {
+    cart: { addItemToCart, removeItemFromCart },
+    ui: { openDetails },
+  } = useStores();
   const cartButtonText = isInCart ? 'Remove' : 'Add to cart';
 
   const addOrRemoveFromCart = () => {
     if (isInCart) {
-      removeFromCart(ndbno);
+      removeItemFromCart(ndbno);
     } else {
-      addToCart(item);
+      addItemToCart(item);
     }
   };
 
@@ -47,4 +55,4 @@ const Item = ({ item }) => {
   );
 };
 
-export default Item;
+export default observer(Item);

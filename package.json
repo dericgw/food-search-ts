@@ -14,13 +14,21 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "analyze": "ANALYZE=true yarn build",
+    "start": "craco start",
+    "build": "craco build",
+    "lint": "eslint src/**/*.{ts,tsx} --fix",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "plugins": [
+      "prettier"
+    ],
+    "extends": "react-app",
+    "rules": {
+      "prettier/prettier": "warn"
+    }
   },
   "browserslist": {
     "production": [
@@ -35,13 +43,18 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^5.2.4",
     "@types/jest": "24.0.15",
     "@types/lodash-es": "^4.17.3",
     "@types/node": "12.6.2",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.4",
     "@types/styled-components": "^4.1.18",
-    "prettier": "^1.18.2"
+    "craco-antd": "^1.11.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpackbar": "^3.2.0"
   },
   "prettier": {
     "printWidth": 100,

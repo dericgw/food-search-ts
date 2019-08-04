@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { IRootStore } from "./index";
+import { IRootStore } from './index';
 
 export interface IUi {
   isLoading: boolean;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 
 import foodImage from '../assets/images/diet.svg';
 
@@ -29,4 +30,4 @@ const NoResults = ({ children }) => (
   </Wrapper>
 );
 
-export default NoResults;
+export default observer(NoResults);

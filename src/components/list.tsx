@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { List as DataList, Button } from 'antd';
 
-import AppContext from '../app.context';
 import Item from './item';
 import NoResults from './no-results';
+import useStores from '../use-stores';
 
 const Wrapper = styled.div`
   max-width: 600px;
@@ -22,8 +23,10 @@ const LoadMoreButton = styled(Button)`
 `;
 
 const List = () => {
-  const { searchResults, isLoading, loadMoreResults, resultsTotal } = useContext(AppContext);
-  const hasMoreResults = searchResults.length < resultsTotal;
+  const {
+    search: { results, loadMoreResults, hasMoreResults },
+    ui: { isLoading },
+  } = useStores();
   const locale = {
     emptyText: <NoResults>No results here. Try searching...</NoResults>,
   };
@@ -35,7 +38,7 @@ const List = () => {
         loadMore={
           hasMoreResults && <LoadMoreButton onClick={loadMoreResults}>Load more...</LoadMoreButton>
         }
-        dataSource={searchResults}
+        dataSource={results}
         locale={locale}
         renderItem={item => <Item item={item} />}
       />
@@ -43,4 +46,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default observer(List);
