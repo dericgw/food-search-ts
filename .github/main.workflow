@@ -10,7 +10,7 @@ action "yarn" {
 }
 
 action "Deploy to S3" {
-  uses = "actions/aws/cli@efb074ae4510f2d12c7801e4461b65bf5e8317e6"
+  uses = "actions/aws/cli@master"
   needs = ["yarn"]
   runs = "sync build s3://food-search-ts --acl public-read"
   secrets = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"]
