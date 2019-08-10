@@ -33,7 +33,7 @@ pipeline {
                         branch 'develop'
                     }
                     steps {
-                        withAws(region:'us-east-1',credentials:'7731c54c-1e9c-4714-a827-db0182be57d1') {
+                        withAWS(region:'us-east-1',credentials:'7731c54c-1e9c-4714-a827-db0182be57d1') {
                             s3Delete(bucket: 'food-search-ts-staging', path:'**/*')
                             s3Upload(bucket: 'food-search-ts-staging', workingDir:'build', includePathPattern:'**/*');
                         }
@@ -46,7 +46,7 @@ pipeline {
                         branch 'master'
                     }
                     steps {
-                        withAws(region:'us-east-1',credentials:'7731c54c-1e9c-4714-a827-db0182be57d1') {
+                        withAWS(region:'us-east-1',credentials:'7731c54c-1e9c-4714-a827-db0182be57d1') {
                             s3Delete(bucket: 'food-search-ts', path:'**/*')
                             s3Upload(bucket: 'food-search-ts', workingDir:'build', includePathPattern:'**/*');
                         }
