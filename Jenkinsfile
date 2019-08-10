@@ -37,7 +37,6 @@ pipeline {
                             s3Delete(bucket: 'food-search-ts-staging', path:'**/*')
                             s3Upload(bucket: 'food-search-ts-staging', workingDir:'build', includePathPattern:'**/*');
                         }
-                        mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'deric.cain@gmail.com')
                     }
                 }
                 
@@ -50,7 +49,6 @@ pipeline {
                             s3Delete(bucket: 'food-search-ts', path:'**/*')
                             s3Upload(bucket: 'food-search-ts', workingDir:'build', includePathPattern:'**/*');
                         }
-                        mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'deric.cain@gmail.com')
                     }
                 }
             }
